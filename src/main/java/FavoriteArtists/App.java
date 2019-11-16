@@ -3,12 +3,14 @@
  */
 package FavoriteArtists;
 
-public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
+import IdConnection.Requetes;
+import IdConnection.Parametres;
 
+public class App {
+   
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+    	
+    	
     }
 }
