@@ -149,10 +149,10 @@ public class RequetesJDBC {
 	        	}
 		}		
 		
-		public static void deleteArtists(Connection conn, Artist artisteASupprimer) throws SQLException 
+		public static void deleteArtists(Connection conn, String artisteASupprimer) throws SQLException 
 		{
 			PreparedStatement stmt = conn.prepareStatement("delete from " + ARTISTS + " where name = ? ");
-			stmt.setString(1, artisteASupprimer.getNom());
+			stmt.setString(1, artisteASupprimer);
 			stmt.executeUpdate();
 		}
 		
@@ -263,5 +263,16 @@ public class RequetesJDBC {
 		        System.out.println("existe déjà dans la base");			
 	        }
 	    }
+		
+		public static void updateTitle (Connection connection, String name) throws SQLException {
+			
+			PreparedStatement stmt = connection.prepareStatement(
+					"if favorite =0 select (update "+TRACK+" set favorite = 1 where title = ?) else (update "+TRACK+" set favorite = 0 where title = ?) ");
+			
+			stmt.setString(1, name);
+			stmt.setString(2, name);
+			stmt.executeUpdate();
+			
+		}
 
 }
