@@ -1,15 +1,19 @@
 package deezer.jdbc;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import deezer.api.RequetesAPI;
 import deezer.model.Album;
 import deezer.model.Artist;
 import deezer.model.Track;
@@ -59,24 +63,33 @@ public class RequetesJDBC {
 		
 		// Affichage
 		
-		public static void afficheTable(Connection connexion, String tableName/*, String tableName2*/) throws SQLException
+		public static void afficheTable(Connection connexion, String tableName) throws SQLException
 		{
 			Statement stmt = connexion.createStatement();
-			String demandeSql = "select * from "+ tableName/*+", "+tableName2*/;
+			String demandeSql = "select * from "+ tableName;
 			ResultSet demandeBdd = stmt.executeQuery(demandeSql);
 			ResultSetMetaData recupeNomColonne = demandeBdd.getMetaData();
 			int nbColonne = recupeNomColonne.getColumnCount();
 			
+			
+			String properTableName = tableName.replace("deezerdb.", "").toUpperCase();
+			System.out.println("\n____________________________________________\nTABLE : " + properTableName +"\n____________________________________________\n");
+			for (int i = 1; i < nbColonne; i++) 
+			{
+				String nomDeColonne = recupeNomColonne.getColumnName(i);
+				System.out.print(String.format("%-10s|", nomDeColonne));
+			}
+			System.out.println();
+			
 			while (demandeBdd.next()) {
+				
 				for (int i = 1; i < nbColonne; i++) 
 				{
 					String valeurColonne = demandeBdd.getString(i);
-					String nomDeColonne = recupeNomColonne.getColumnName(i);
-					System.out.println(MessageFormat.format("<{0}:{1}>\t\t",nomDeColonne,valeurColonne));
+					System.out.print(String.format("%-10.10s|", valeurColonne));
 				}
 				System.out.println();
-			}
-			
+			}	
 		}
 		
 		
@@ -95,8 +108,7 @@ public class RequetesJDBC {
 				int id = rs.getInt("id");
 				String nom = rs.getString("nom");
 				int nbFan = rs.getInt("nb_fan");
-				return new Artist(id, nom, nbFan);
-				
+				return new Artist(id, nom, nbFan);			
 			} 
 			else 
 			{
@@ -104,29 +116,43 @@ public class RequetesJDBC {
 			}
 		}
 		
-		public static void updateArtists(Connection conn, Artist artisteAModifier) throws SQLException 
-		{
-			PreparedStatement stmt = conn.prepareStatement("update " + ARTISTS + " set nom = ? , nb_fan = ?  where id = ? ");
-			stmt.setString(1, artisteAModifier.getNom());
-			stmt.setLong(2, artisteAModifier.getNbFan());
-			stmt.setInt(3, artisteAModifier.getId());
-			stmt.executeUpdate();
-		}
 		
-		public static void createArtists(Connection conn, Artist nvArtiste) throws SQLException 
+		public static void createArtistsWithID(Connection conn, int ArtistID) throws SQLException, MalformedURLException, IOException 
 		{
+			Artist nvArtiste = RequetesAPI.artisteDeezer(conn, ArtistID);
+			
 			PreparedStatement stmt = conn.prepareStatement("insert into " + ARTISTS + " values (? , ? , ?) ");
 			stmt.setInt(1, nvArtiste.getId());
 			stmt.setString(2, nvArtiste.getNom());
 			stmt.setLong(3, nvArtiste.getNbFan());
-			stmt.executeUpdate();
-			System.out.println("ok");
+			try {
+		        stmt.executeUpdate();
+		        }
+		        catch (SQLIntegrityConstraintViolationException e) {
+		        	System.out.println("existe déjà dans la base");			
+	        	}
 		}
+		
+		public static void createArtistsWithName(Connection conn, String artistName) throws SQLException, MalformedURLException, IOException 
+		{
+			Artist nvArtiste = RequetesAPI.artisteDeezer(conn, artistName);
+			
+			PreparedStatement stmt = conn.prepareStatement("insert into " + ARTISTS + " values (? , ? , ?) ");
+			stmt.setInt(1, nvArtiste.getId());
+			stmt.setString(2, nvArtiste.getNom());
+			stmt.setLong(3, nvArtiste.getNbFan());
+			try {
+		        stmt.executeUpdate();
+		        }
+		        catch (SQLIntegrityConstraintViolationException e) {
+		        	System.out.println("existe déjà dans la base");			
+	        	}
+		}		
 		
 		public static void deleteArtists(Connection conn, Artist artisteASupprimer) throws SQLException 
 		{
-			PreparedStatement stmt = conn.prepareStatement("delete from " + ARTISTS + " where id = ? ");
-			stmt.setInt(1, artisteASupprimer.getId());
+			PreparedStatement stmt = conn.prepareStatement("delete from " + ARTISTS + " where name = ? ");
+			stmt.setString(1, artisteASupprimer.getNom());
 			stmt.executeUpdate();
 		}
 		
@@ -145,14 +171,17 @@ public class RequetesJDBC {
 				int nbFan = rs.getInt("nb_fan");
 				artisteListe.add(new Artist(id, nom, nbFan));
 				
-			} 
+			}
 			return artisteListe;
 		}
 		
 		
 		// Methodes CRUD album
-		
-		public static void createAlbum(Connection connection, Album newAlbum) throws SQLException{
+	
+		public static void createAlbumWithID(Connection connection, int albumID) throws SQLException, MalformedURLException, IOException{
+			
+			Album newAlbum = RequetesAPI.albumDeezer(connection, albumID);
+			
 	        PreparedStatement stmt = connection.prepareStatement(
 	                "insert into "+ALBUM+" values (? , ? , ?)");
 	        stmt.setInt(1, newAlbum.getId());
@@ -160,14 +189,41 @@ public class RequetesJDBC {
 	        stmt.setInt(3, newAlbum.getId_artist());
 	        System.out.println(stmt);
 	        
-	        stmt.executeUpdate();
+	        try {
+	        	stmt.executeUpdate();
+	        }
+	        catch (SQLIntegrityConstraintViolationException e) {
+	        	System.out.println("existe déjà dans la base");			
+        	}
+	    }
+		
+		public static void createAlbumWithName(Connection connection, String albumName) throws SQLException, MalformedURLException, IOException{
+			
+			Album newAlbum = RequetesAPI.albumDeezer(connection, albumName);
+			
+	        PreparedStatement stmt = connection.prepareStatement(
+	                "insert into "+ALBUM+" values (? , ? , ?)");
+	        stmt.setInt(1, newAlbum.getId());
+	        stmt.setString(2, newAlbum.getTitle());
+	        stmt.setInt(3, newAlbum.getId_artist());
+	        System.out.println(stmt);
+	        
+	        try {
+	        	stmt.executeUpdate();
+	        }
+	        catch (SQLIntegrityConstraintViolationException e) {
+	        	System.out.println("existe déjà dans la base");			
+        	}
 	    }
 		
 		
 		
 		// Methodes CRUD title
 		
-		public static void createTitle(Connection connection, Track newTitre) throws SQLException{
+		public static void createTitleWithID(Connection connection, int titreID) throws SQLException, MalformedURLException, IOException{
+			
+			Track newTitre = RequetesAPI.titreDeezer(connection, titreID);
+			
 	        PreparedStatement stmt = connection.prepareStatement(
 	                "insert into "+TRACK+" values (? , ?, ?, ?, ? )");
 	        stmt.setInt(1, newTitre.getId());
@@ -178,7 +234,34 @@ public class RequetesJDBC {
 
 	        System.out.println(stmt);
 	        
-	        stmt.executeUpdate();
+	        try {
+		        stmt.executeUpdate();
+		    }
+		    catch (SQLIntegrityConstraintViolationException e) {
+		        System.out.println("existe déjà dans la base");			
+	        }
+	    }
+		
+		public static void createTitleWithName(Connection connection, String titre) throws SQLException, MalformedURLException, IOException{
+			
+			Track newTitre = RequetesAPI.titreDeezer(connection, titre);
+			
+	        PreparedStatement stmt = connection.prepareStatement(
+	                "insert into "+TRACK+" values (? , ?, ?, ?, ? )");
+	        stmt.setInt(1, newTitre.getId());
+	        stmt.setString(2, newTitre.getTitle());
+	        stmt.setInt(3, newTitre.getDuration());
+	        stmt.setInt(4, newTitre.getFavorite());
+	        stmt.setInt(5, newTitre.getId_album());
+
+	        System.out.println(stmt);
+	        
+	        try {
+		        stmt.executeUpdate();
+		    }
+		    catch (SQLIntegrityConstraintViolationException e) {
+		        System.out.println("existe déjà dans la base");			
+	        }
 	    }
 
 }

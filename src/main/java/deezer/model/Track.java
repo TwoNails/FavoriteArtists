@@ -19,16 +19,16 @@ public class Track{
 	}
 	
 
-	public Track (JSONObject artistjson) {
-		this.id = artistjson.getInt("id");
-	    this.title = artistjson.getString("title");
-	    this.duration = artistjson.getInt("duration");
+	public Track (JSONObject titrejson) {
+		this.id = titrejson.getInt("id");
+	    this.title = titrejson.getString("title");
+	    this.duration = titrejson.getInt("duration");
 	    this.favorite = 0;
-	    this.id_album = artistjson.getJSONObject("album").getInt("id");
+	    this.id_album = titrejson.getJSONObject("album").getInt("id");
 	}
 	
-	public Track (JSONArray artistjson) {
-		this(artistjson.getJSONObject(0));
+	public Track (JSONArray titrejson) {
+		this(titrejson.getJSONObject(0));
 	}
 
 	// get & set

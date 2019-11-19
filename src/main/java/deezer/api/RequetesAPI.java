@@ -37,7 +37,7 @@ public class RequetesAPI {
 	}
 	
 	
-	public static Artist artisteDeezer (Connection conn, String artiste) throws MalformedURLException, IOException
+	public static Artist artisteDeezer (Connection conn, String artiste) throws MalformedURLException, IOException, SQLException
 	{
 		String url = "https://api.deezer.com/search/artist/?q="+artiste+"&index=0&nb_items=1&output=java";
 		
@@ -45,20 +45,18 @@ public class RequetesAPI {
 		writeJson(jsonText);
 		JSONObject jsonComplet = new JSONObject(jsonText);
 		JSONArray dataArtist = jsonComplet.getJSONArray("data");
-		
+				
 		return new Artist(dataArtist);
-		
 	}
 	
-	public static Artist artisteDeezer (Connection conn, int id) throws MalformedURLException, IOException, SQLException
+	public static Artist artisteDeezer (Connection conn, int idArtist) throws MalformedURLException, IOException, SQLException
 	{
-		String url = "https://api.deezer.com/artist/"+id;
+		String url = "https://api.deezer.com/artist/"+idArtist;
 		
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
 		writeJson(jsonText);
 		JSONObject jsonComplet = new JSONObject(jsonText);
 		
-		RequetesJDBC.createArtists(conn, new Artist(jsonComplet));
 		return new Artist(jsonComplet);
 	}
 	
@@ -67,6 +65,7 @@ public class RequetesAPI {
 		album = album.replaceAll(" ", "%20");
 		
 		String url = "https://api.deezer.com/search/album/?q="+album+"&index=0&nb_items=1&output=java";
+		System.out.println(url);
 		
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
 		writeJson(jsonText);
@@ -74,24 +73,10 @@ public class RequetesAPI {
 		JSONArray dataAlbum = jsonComplet.getJSONArray("data");
 		JSONObject dataArtist = dataAlbum.getJSONObject(0).getJSONObject("artist");
 		
-		int idArtist= dataArtist.getInt("id");
-		boolean artistAlreadyInDB = false;
+		int idArtist= dataArtist.getInt("id");	
+		RequetesJDBC.createArtistsWithID(conn, idArtist);
 		
-		for (Integer n : RequetesJDBC.listIDArtists(conn)) {
-			if(n==idArtist) {
-				artistAlreadyInDB = true;
-			}
-		}
-		
-		if(artistAlreadyInDB){
-			RequetesJDBC.createAlbum(conn, albumDeezer(conn, dataAlbum.getJSONObject(0).getInt("id")));
-			RequetesJDBC.createTitle(conn, titreDeezer(conn, titre));
-			return new Album(dataAlbum);
-		} else {
-			RequetesJDBC.createArtists(conn, artisteDeezer(conn, idArtist));
-			RequetesJDBC.createAlbum(conn, albumDeezer(conn, dataAlbum.getJSONObject(0).getInt("id")));
-			return new Album(dataAlbum);
-		}
+		return new Album(dataAlbum);
 	}
 	
 	
@@ -103,55 +88,44 @@ public class RequetesAPI {
 		writeJson(jsonText);
 		JSONObject jsonComplet = new JSONObject(jsonText);
 		
-		JSONObject dataArtist = jsonComplet.getJSONObject("artist");
+		int idArtist = jsonComplet.getJSONObject("artist").getInt("id");
+		RequetesJDBC.createArtistsWithID(conn, idArtist);
 		
-		int idArtist= dataArtist.getInt("id");
-		boolean artistAlreadyInDB = false;
-		
-		for (Integer n : RequetesJDBC.listIDArtists(conn)) {
-			if(n==idArtist) {
-				artistAlreadyInDB = true;
-			}
-		}
-		
-		if(artistAlreadyInDB){
-			RequetesJDBC.createAlbum(conn, new Album(jsonComplet));
-			return new Album(jsonComplet);
-		} else {
-			RequetesJDBC.createArtists(conn, artisteDeezer(conn, idArtist));
-			RequetesJDBC.createAlbum(conn, new Album(jsonComplet));
-			return new Album(jsonComplet);
-		}
-	}
+		return new Album(jsonComplet);
+}
 	
 	
 	
 	
 	public static Track titreDeezer (Connection conn, String titre) throws MalformedURLException, IOException, SQLException
 	{
-		String url = "https://api.deezer.com/search/track/?q="+titre+"&index=0&limit=2&output=json";
+		titre = titre.replace(" ", "%20");
 		
+		String url = "https://api.deezer.com/search/track/?q="+titre+"&index=0&limit=1&output=json";
+		System.out.println(url);
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
 		writeJson(jsonText);
 		JSONObject jsonComplet = new JSONObject(jsonText);
 		JSONArray dataTitre = jsonComplet.getJSONArray("data");
-		JSONObject dataAlbum = dataTitre.getJSONObject(0).getJSONObject("album");
 		
-		int idAlbum= dataAlbum.getInt("id");
-		boolean titreAlreadyInDB = false;
+		int idAlbum = dataTitre.getJSONObject(0).getJSONObject("album").getInt("id");
+		RequetesJDBC.createAlbumWithID(conn, idAlbum);
 		
-		for (Integer n : RequetesJDBC.listIDAlbums(conn)) {
-			if(n==idAlbum) {
-				titreAlreadyInDB = true;
-			}
-		}
+		return new Track(dataTitre);
+	}
+	
+	public static Track titreDeezer (Connection conn, int idTitre) throws MalformedURLException, IOException, SQLException
+	{
+		String url = "https://api.deezer.com/track/"+idTitre;
 		
-		if(titreAlreadyInDB){
-			return new Track(dataTitre);
-		} else {
-			RequetesJDBC.createAlbum(conn, albumDeezer(conn, idAlbum));
-			return new Track(dataTitre);
-		}
+		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
+		writeJson(jsonText);
+		JSONObject jsonComplet = new JSONObject(jsonText);
+		
+		int idAlbum = jsonComplet.getJSONObject("album").getInt("id");
+		RequetesJDBC.createAlbumWithID(conn, idAlbum);
+	
+		return new Track(jsonComplet);
 	}
 	
 }
