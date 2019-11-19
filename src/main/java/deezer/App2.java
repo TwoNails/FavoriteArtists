@@ -51,22 +51,9 @@ public class App2  {
     public static void main(String[] args) throws MalformedURLException, IOException, SQLException 
     { 
     	Session session = new Session();
-    
-    	
-    	//artisteDeezer("Eminem");  
-    	//titreDeezer("Eminem");
-    	Artist art = RequetesAPI.artisteDeezer("eminem");
-    	
-    	System.out.println("nombre de fans de notre objet eminem = " + art.getNbFan());
-    	System.out.println("nom de notre objet eminem = " + art.getNom());
-    	
-    	Artist VillagePeople  = RequetesAPI.artisteDeezer("people");
-    	
-    	Album alb = RequetesAPI.albumDeezer(session.getConnection(), "carter");
-    	System.out.println(alb.getTitle());
-    	
-    	Track ttr = RequetesAPI.titreDeezer(session.getConnection(), "despacito");
-    	System.out.println(ttr.getTitle());
-    	
+       	//Artist art = RequetesAPI.artisteDeezer(session.getConnection(), "supertramp");
+       	//Artist art2  = RequetesAPI.artisteDeezer(session.getConnection(), "people");
+       	Album alb = RequetesAPI.albumDeezer(session.getConnection(), "the eminem show");
+       	Track ttr = RequetesAPI.titreDeezer(session.getConnection(), "pookie");
     }
 }

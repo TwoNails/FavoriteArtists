@@ -37,7 +37,7 @@ public class RequetesAPI {
 	}
 	
 	
-	public static Artist artisteDeezer (String artiste) throws MalformedURLException, IOException
+	public static Artist artisteDeezer (Connection conn, String artiste) throws MalformedURLException, IOException
 	{
 		String url = "https://api.deezer.com/search/artist/?q="+artiste+"&index=0&nb_items=1&output=java";
 		
@@ -47,9 +47,10 @@ public class RequetesAPI {
 		JSONArray dataArtist = jsonComplet.getJSONArray("data");
 		
 		return new Artist(dataArtist);
+		
 	}
 	
-	public static Artist artisteDeezer (int id) throws MalformedURLException, IOException
+	public static Artist artisteDeezer (Connection conn, int id) throws MalformedURLException, IOException, SQLException
 	{
 		String url = "https://api.deezer.com/artist/"+id;
 		
@@ -57,12 +58,14 @@ public class RequetesAPI {
 		writeJson(jsonText);
 		JSONObject jsonComplet = new JSONObject(jsonText);
 		
-		
+		RequetesJDBC.createArtists(conn, new Artist(jsonComplet));
 		return new Artist(jsonComplet);
 	}
 	
 	public static Album albumDeezer (Connection conn, String album) throws MalformedURLException, IOException, SQLException
 	{
+		album = album.replaceAll(" ", "%20");
+		
 		String url = "https://api.deezer.com/search/album/?q="+album+"&index=0&nb_items=1&output=java";
 		
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
@@ -81,9 +84,12 @@ public class RequetesAPI {
 		}
 		
 		if(artistAlreadyInDB){
+			RequetesJDBC.createAlbum(conn, albumDeezer(conn, dataAlbum.getJSONObject(0).getInt("id")));
+			RequetesJDBC.createTitle(conn, titreDeezer(conn, titre));
 			return new Album(dataAlbum);
 		} else {
-			RequetesJDBC.createArtists(conn, artisteDeezer(idArtist));
+			RequetesJDBC.createArtists(conn, artisteDeezer(conn, idArtist));
+			RequetesJDBC.createAlbum(conn, albumDeezer(conn, dataAlbum.getJSONObject(0).getInt("id")));
 			return new Album(dataAlbum);
 		}
 	}
@@ -109,9 +115,11 @@ public class RequetesAPI {
 		}
 		
 		if(artistAlreadyInDB){
+			RequetesJDBC.createAlbum(conn, new Album(jsonComplet));
 			return new Album(jsonComplet);
 		} else {
-			RequetesJDBC.createArtists(conn, artisteDeezer(idArtist));
+			RequetesJDBC.createArtists(conn, artisteDeezer(conn, idArtist));
+			RequetesJDBC.createAlbum(conn, new Album(jsonComplet));
 			return new Album(jsonComplet);
 		}
 	}

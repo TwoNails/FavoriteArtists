@@ -106,7 +106,7 @@ public class RequetesJDBC {
 		
 		public static void updateArtists(Connection conn, Artist artisteAModifier) throws SQLException 
 		{
-			PreparedStatement stmt = conn.prepareStatement(" update " + ARTISTS + " set nom = ? , nb_fan = ?  where id = ? ");
+			PreparedStatement stmt = conn.prepareStatement("update " + ARTISTS + " set nom = ? , nb_fan = ?  where id = ? ");
 			stmt.setString(1, artisteAModifier.getNom());
 			stmt.setLong(2, artisteAModifier.getNbFan());
 			stmt.setInt(3, artisteAModifier.getId());
@@ -115,16 +115,17 @@ public class RequetesJDBC {
 		
 		public static void createArtists(Connection conn, Artist nvArtiste) throws SQLException 
 		{
-			PreparedStatement stmt = conn.prepareStatement(" insert into " + ARTISTS + " values (? , ? , ?) ");
+			PreparedStatement stmt = conn.prepareStatement("insert into " + ARTISTS + " values (? , ? , ?) ");
 			stmt.setInt(1, nvArtiste.getId());
 			stmt.setString(2, nvArtiste.getNom());
 			stmt.setLong(3, nvArtiste.getNbFan());
 			stmt.executeUpdate();
+			System.out.println("ok");
 		}
 		
 		public static void deleteArtists(Connection conn, Artist artisteASupprimer) throws SQLException 
 		{
-			PreparedStatement stmt = conn.prepareStatement(" delete from " + ARTISTS + " where id = ? ");
+			PreparedStatement stmt = conn.prepareStatement("delete from " + ARTISTS + " where id = ? ");
 			stmt.setInt(1, artisteASupprimer.getId());
 			stmt.executeUpdate();
 		}

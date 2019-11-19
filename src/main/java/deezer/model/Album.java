@@ -21,7 +21,7 @@ public class Album {
 	public Album(JSONObject albumjson) {
 		this.id = albumjson.getInt("id");
 		this.title = albumjson.getString("title");
-		this.id_artist = albumjson.getInt("id");
+		this.id_artist = albumjson.getJSONObject("artist").getInt("id");
 	}
 	
 	
