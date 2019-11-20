@@ -130,7 +130,6 @@ public class RequetesJDBC {
 		stmt.setInt(1, newAlbum.getId());
 		stmt.setString(2, newAlbum.getTitle());
 		stmt.setInt(3, newAlbum.getId_artist());
-		System.out.println(stmt);
 
 		try {
 			stmt.executeUpdate();
@@ -148,7 +147,6 @@ public class RequetesJDBC {
 		stmt.setInt(1, newAlbum.getId());
 		stmt.setString(2, newAlbum.getTitle());
 		stmt.setInt(3, newAlbum.getId_artist());
-		System.out.println(stmt);
 
 		try {
 			stmt.executeUpdate();
@@ -162,7 +160,7 @@ public class RequetesJDBC {
 	public static void createTitleWithID(Connection connection, int titreID)
 			throws SQLException, MalformedURLException, IOException {
 
-		Track newTitre = RequetesAPI.titreDeezer(connection, titreID);
+		Track newTitre = RequetesAPI.trackDeezer(connection, titreID);
 
 		PreparedStatement stmt = connection.prepareStatement("insert into " + TRACK + " values (? , ?, ?, ?, ? )");
 		stmt.setInt(1, newTitre.getId());
@@ -170,8 +168,6 @@ public class RequetesJDBC {
 		stmt.setInt(3, newTitre.getDuration());
 		stmt.setInt(4, newTitre.getFavorite());
 		stmt.setInt(5, newTitre.getId_album());
-
-		System.out.println(stmt);
 
 		try {
 			stmt.executeUpdate();
@@ -183,7 +179,7 @@ public class RequetesJDBC {
 	public static void createTitleWithName(Connection connection, String titre)
 			throws SQLException, MalformedURLException, IOException {
 
-		Track newTitre = RequetesAPI.titreDeezer(connection, titre);
+		Track newTitre = RequetesAPI.trackDeezer(connection, titre);
 
 		PreparedStatement stmt = connection.prepareStatement("insert into " + TRACK + " values (? , ?, ?, ?, ? )");
 		stmt.setInt(1, newTitre.getId());
@@ -191,8 +187,6 @@ public class RequetesJDBC {
 		stmt.setInt(3, newTitre.getDuration());
 		stmt.setInt(4, newTitre.getFavorite());
 		stmt.setInt(5, newTitre.getId_album());
-
-		System.out.println(stmt);
 
 		try {
 			stmt.executeUpdate();
@@ -209,8 +203,6 @@ public class RequetesJDBC {
 		PreparedStatement stmt = conn.prepareStatement("select * from " + ARTISTS + " where name = ?");
 		stmt.setString(1, artistName);
 
-		System.out.println("Our query for getArtist (with arg : artistName) is : " + stmt);
-
 		ResultSet rs = stmt.executeQuery();
 
 		// if (rs.next()) {
@@ -218,8 +210,6 @@ public class RequetesJDBC {
 		try {
 			rs.next();
 			int id = rs.getInt("id");
-
-			System.out.println(id);
 			return getArtist(conn, id);
 		} catch (SQLException e) {
 			System.out.println("L'artiste cherché n'est pas dans la base");
@@ -236,7 +226,7 @@ public class RequetesJDBC {
 		if (rs.next()) {
 			int id = rs.getInt("id");
 			String name = rs.getString("name");
-			int nbFan = rs.getInt("nb_fan");	
+			int nbFan = rs.getInt("nb_fan");
 			return new Artist(id, name, nbFan);
 		} else {
 			throw new Error("l'artiste cherché n'est pas dans la base");
@@ -251,11 +241,13 @@ public class RequetesJDBC {
 		stmt.setString(1, albumName);
 		ResultSet rs = stmt.executeQuery();
 
-		if (rs.next()) {
+		rs.next();
+		try {
 			int id = rs.getInt("id");
 			return getAlbum(conn, id);
-		} else {
-			throw new Error("l'album cherché n'est pas dans la base");
+		} catch (SQLException e) {
+			System.out.println("l'album cherché n'est pas dans la base");
+			return new Album(0, "NOT IN BASE", 0);
 		}
 	}
 
@@ -265,13 +257,15 @@ public class RequetesJDBC {
 		stmt.setInt(1, albumID);
 		ResultSet rs = stmt.executeQuery();
 
-		if (rs.next()) {
+		rs.next();
+		try {
 			int id = rs.getInt("id");
 			String title = rs.getString("title");
 			int id_artist = rs.getInt("id_artist");
 			return new Album(id, title, id_artist);
-		} else {
-			throw new Error("l'album cherché n'est pas dans la base");
+		} catch (SQLException e) {
+			System.out.println("l'album cherché n'est pas dans la base");
+			return new Album(0, "NOT IN BASE", 0);
 		}
 	}
 
@@ -283,11 +277,14 @@ public class RequetesJDBC {
 		stmt.setString(1, trackName);
 		ResultSet rs = stmt.executeQuery();
 
-		if (rs.next()) {
+		rs.next();
+		try {
+
 			int id = rs.getInt("id");
 			return getTrack(conn, id);
-		} else {
-			throw new Error("la piste cherchée n'est pas dans la base");
+		} catch (SQLException e) {
+			System.out.println("la piste cherchée n'est pas dans la base");
+			return new Track(0, "NOT IN BASE", 0, 0, 0);
 		}
 	}
 
@@ -298,22 +295,18 @@ public class RequetesJDBC {
 		ResultSet rs = stmt.executeQuery();
 
 		rs.next();
-		System.out.println(rs);
+		try {
+			int id = rs.getInt("id");
+			String title = rs.getString("title");
+			int duration = rs.getInt("duration");
+			int favorite = rs.getInt("favorite");
+			int id_album = rs.getInt("id_album");
+			return new Track(id, title, duration, favorite, id_album);
+		} catch (SQLException e) {
+			System.out.println("la piste cherchée n'est pas dans la base");
+			return new Track(0, "NOT IN BASE", 0, 0, 0);
 
-		int id = rs.getInt("id");
-		String title = rs.getString("title");
-		int duration = rs.getInt("duration");
-		int favorite = rs.getInt("favorite");
-		int id_album = rs.getInt("id_album");
-		return new Track(id, title, duration, favorite, id_album);
-
-		/*
-		 * if (rs.next()) { int id = rs.getInt("id"); String title =
-		 * rs.getString("title"); int duration = rs.getInt("duration"); int favorite =
-		 * rs.getInt("favorite"); int id_artist = rs.getInt("id_artist"); return new
-		 * Track(id, title, duration, favorite, id_artist); } else { throw new
-		 * Error("la piste cherchée n'est pas dans la base"); }
-		 */
+		}
 	}
 
 	// DELETE METHODS
@@ -330,7 +323,6 @@ public class RequetesJDBC {
 	 */
 	public static void deleteArtist(Connection conn, String artistName) throws SQLException {
 		Artist artistToDelete = getArtist(conn, artistName);
-		System.out.println("artistToDelete's ID = " + artistToDelete.getId());
 		deleteArtist(conn, artistToDelete.getId());
 	}
 
@@ -409,7 +401,6 @@ public class RequetesJDBC {
 		stmt.execute();
 	}
 
-
 	// LISTES
 
 	// liste d'ID de tous les albums dont l'auteur (idArtiste) est nameAuteur
@@ -419,7 +410,6 @@ public class RequetesJDBC {
 
 		Statement stmt = conn.createStatement();
 		String demandSQL = "select id from " + ALBUM + " WHERE id_artist = " + idArtist;
-		System.out.println(demandSQL);
 
 		ResultSet demandeBdd = stmt.executeQuery(demandSQL);
 

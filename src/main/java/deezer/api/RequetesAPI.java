@@ -39,6 +39,8 @@ public class RequetesAPI {
 	
 	public static Artist artisteDeezer (Connection conn, String artiste) throws MalformedURLException, IOException, SQLException
 	{
+		artiste = artiste.replaceAll(" ", "%20");
+		
 		String url = "https://api.deezer.com/search/artist/?q="+artiste+"&index=0&nb_items=1&output=java";
 		
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
@@ -65,7 +67,6 @@ public class RequetesAPI {
 		album = album.replaceAll(" ", "%20");
 		
 		String url = "https://api.deezer.com/search/album/?q="+album+"&index=0&nb_items=1&output=java";
-		System.out.println(url);
 		
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
 		writeJson(jsonText);
@@ -97,11 +98,12 @@ public class RequetesAPI {
 	
 	
 	
-	public static Track titreDeezer (Connection conn, String titre) throws MalformedURLException, IOException, SQLException
+	public static Track trackDeezer (Connection conn, String titre) throws MalformedURLException, IOException, SQLException
 	{
 		titre = titre.replace(" ", "%20");
 		
 		String url = "https://api.deezer.com/search/track/?q="+titre+"&index=0&limit=1&output=json";
+		
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
 		writeJson(jsonText);
 		JSONObject jsonComplet = new JSONObject(jsonText);
@@ -113,7 +115,7 @@ public class RequetesAPI {
 		return new Track(dataTitre);
 	}
 	
-	public static Track titreDeezer (Connection conn, int idTitre) throws MalformedURLException, IOException, SQLException
+	public static Track trackDeezer (Connection conn, int idTitre) throws MalformedURLException, IOException, SQLException
 	{
 		String url = "https://api.deezer.com/track/"+idTitre;
 		

@@ -7,20 +7,30 @@ import java.util.Scanner;
 
 import deezer.IdConnection.Session;
 import deezer.jdbc.RequetesJDBC;
-import deezer.model.Artist;
 
+
+/**
+ * 
+ * @author nico,olivier,tony
+ * @return Display the menu for each request in the database
+ */
 public class menu {
-
+	// fields
 	public enum ChoixTable {
 		ARTIST, ALBUM, TRACK;
 	}
 
-	private static ChoixTable table;
-	public static Session session = new Session();
-	public static Scanner lectureScanner = new Scanner(System.in);
-	public static String tableSelectionne;
-	public static int reponseNum;
 
+	private static ChoixTable table;
+	private static Session session = new Session();
+	private static Scanner lectureScanner = new Scanner(System.in);
+	private static String tableSelectionne;
+	private static int reponseNum;
+
+	/**
+	 * select the table we want to work in a string;
+	 * @return the name of the table selected in our database
+	 */
 	public static String selectionTable() {
 
 		int choixNum = -1;
@@ -33,7 +43,7 @@ public class menu {
 				if (choixNum > 0 && choixNum < 4) {
 					continue;
 				} else {
-					System.out.println("Veuillez choisir un numero valide : ");					
+					System.out.println("Veuillez choisir un numero valide : ");
 				}
 			} catch (Exception e) {
 				System.out.println("Erreur pas un numero");
@@ -57,7 +67,10 @@ public class menu {
 		}
 		return tableSelectionne;
 	}
-
+	/**
+	 * Display the Menu for the table selected
+	 * @throws SQLException in the request from jdbc.
+	 */
 	public static void affichageMenuTable() throws SQLException {
 
 		System.out.println("Choix de la table à afficher");
@@ -65,7 +78,10 @@ public class menu {
 				+ (String.format("%-10s|", "2 ALBUM") + String.format("%-10s|", "3 TRACK")));
 		RequetesJDBC.afficheTable(session.getConnection(), selectionTable());
 	}
-
+	/**
+	 * Display the Menu for the options under each table
+	 * @throws SQLException from the affichageMenuTable
+	 */
 	public static void affichageOption() throws SQLException {
 
 		affichageMenuTable();
@@ -73,7 +89,10 @@ public class menu {
 				+ String.format("%-10s|", "3 DELETE") + (String.format("%-10s|", "4 UPDATE"))));
 
 	}
-
+	/**
+	 * select the option we want to use on our previous selected table
+	 * 
+	 */
 	public static void selectionOption() {
 		System.out.println("\nVeuillez choisir un numero : ");
 		Scanner lectureScanner = new Scanner(System.in);
@@ -86,22 +105,30 @@ public class menu {
 				if (reponseNum > 0 && reponseNum < 5) {
 					continue;
 				} else {
-					System.out.println("Veuillez choisir un numero valide : ");					
+					System.out.println("Veuillez choisir un numero valide : ");
 				}
 			} catch (Exception e) {
 				System.out.println("Erreur pas un numero");
 				System.out.println("Veuillez choisir un numero : ");
 			}
 		} while (reponseNum < 0 || reponseNum > 4);
+		lectureScanner.close();
 	}
-
+	/**
+	 * Application of the CRUD on each table
+	 * the Update is only available for the title as favorite.
+	 * We will implement him in a future released.
+	 * @throws SQLException
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	public static void CRUD() throws SQLException, MalformedURLException, IOException {
 
 		affichageOption();
-		
+
 		if (tableSelectionne == ChoixTable.ARTIST.name()) {
 			selectionOption();
-			
+
 			switch (reponseNum) {
 			case 1: // CREATION ARTISTE
 				System.out.println("Quel artiste veux-tu ajouter ?");
@@ -109,25 +136,25 @@ public class menu {
 				RequetesJDBC.createArtist(session.getConnection(), artistName);
 				System.out.println("MAJ effectuée");
 				break;
-				
+
 			case 2: // LECTURE TABLE ARTISTE
 				RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.ARTISTS);
 				break;
-				
+
 			case 3: // SUPPRESSION ARTISTE
 				System.out.println("Quel artiste veux-tu supprimer?");
 				String deleteName = lectureScanner.nextLine();
 				RequetesJDBC.deleteArtist(session.getConnection(), deleteName);
 				System.out.println("MAJ effectuée");
 				break;
-				
-			case 4 : // IMPOSSIBLE
+
+			case 4: // IMPOSSIBLE
 				System.out.println("Fonction à implémenter"); // TODO : penser à ajouter la fonction
-				break;				
+				break;
 			}
 		} else if (tableSelectionne == ChoixTable.ALBUM.name()) {
 			selectionOption();
-			
+
 			switch (reponseNum) {
 			case 1: // CREATION ALBUM
 				System.out.println("Quel album veux-tu ajouter ?");
@@ -135,21 +162,21 @@ public class menu {
 				RequetesJDBC.createAlbum(session.getConnection(), albumName);
 				System.out.println("MAJ effectuée");
 				break;
-				
+
 			case 2: // LECTURE TABLE ALBUM
 				RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.ALBUM);
 				break;
-				
+
 			case 3: // SUPPRESSION ALBUM
 				System.out.println("Quel album veux-tu supprimer?");
 				String deleteName = lectureScanner.nextLine();
 				RequetesJDBC.deleteAlbum(session.getConnection(), deleteName);
 				System.out.println("MAJ effectuée");
 				break;
-				
-			case 4 : // IMPOSSIBLE
+
+			case 4: // IMPOSSIBLE
 				System.out.println("Fonction à implémenter"); // TODO : penser à ajouter la fonction
-				break;	
+				break;
 			}
 
 		} else if (tableSelectionne == ChoixTable.TRACK.name()) {
@@ -162,15 +189,15 @@ public class menu {
 				RequetesJDBC.createTitleWithName(session.getConnection(), trackName);
 				System.out.println("MAJ effectuée");
 				break;
-				
+
 			case 2: // LECTURE TABLE TRACK
 				RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.TRACK);
 				break;
-				
+
 			case 3: // SUPPRESSION TRACK
 				System.out.println("Quel titre veux-tu supprimer?");
 				String deleteTrack = lectureScanner.nextLine();
-				RequetesJDBC.deleteAlbum(session.getConnection(), deleteTrack);
+				RequetesJDBC.deleteTrack(session.getConnection(), deleteTrack);
 				System.out.println("MAJ effectuée");
 				break;
 
