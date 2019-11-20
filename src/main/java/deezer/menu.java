@@ -32,6 +32,8 @@ public class menu {
 				choixNum = Integer.parseInt(reponse);
 				if (choixNum > 0 && choixNum < 4) {
 					continue;
+				} else {
+					System.out.println("Veuillez choisir un numero valide : ");					
 				}
 			} catch (Exception e) {
 				System.out.println("Erreur pas un numero");
@@ -79,11 +81,12 @@ public class menu {
 
 		do {
 			String reponse = lectureScanner.nextLine();
-
 			try {
 				reponseNum = Integer.parseInt(reponse);
 				if (reponseNum > 0 && reponseNum < 5) {
 					continue;
+				} else {
+					System.out.println("Veuillez choisir un numero valide : ");					
 				}
 			} catch (Exception e) {
 				System.out.println("Erreur pas un numero");
@@ -103,28 +106,19 @@ public class menu {
 			case 1: // CREATION ARTISTE
 				System.out.println("Quel artiste veux-tu ajouter ?");
 				String artistName = lectureScanner.nextLine();
-				RequetesJDBC.createArtistsWithName(session.getConnection(), artistName);
-				affichageOption();
+				RequetesJDBC.createArtist(session.getConnection(), artistName);
 				break;
 				
 			case 2: // LECTURE TABLE ARTISTE
 				RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.ARTISTS);
-				affichageOption();
 				break;
 				
 			case 3: // SUPPRESSION ARTISTE
 				System.out.println("Quel artiste veux-tu supprimer?");
 				String deleteName = lectureScanner.nextLine();
-				RequetesJDBC.deleteArtists(session.getConnection(), deleteName);
-				affichageOption();
+				RequetesJDBC.deleteArtist(session.getConnection(), deleteName);
 				break;
-
-			case 4: // FAVORIS ARTISTE
-				System.out.println("Quel titre veux-tu mettre en favoris?");
-				String updateName = lectureScanner.nextLine();
-				RequetesJDBC.updateTitle(session.getConnection(), updateName);
-				affichageOption();
-				break;
+				
 			}
 		} else if (tableSelectionne == ChoixTable.ALBUM.name()) {
 			selectionOption();
@@ -133,20 +127,17 @@ public class menu {
 			case 1: // CREATION ALBUM
 				System.out.println("Quel album veux-tu ajouter ?");
 				String albumName = lectureScanner.nextLine();
-				RequetesJDBC.createAlbumWithName(session.getConnection(), albumName);
-				affichageOption();
+				RequetesJDBC.createAlbum(session.getConnection(), albumName);
 				break;
 				
 			case 2: // LECTURE TABLE ALBUM
 				RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.ALBUM);
-				affichageOption();
 				break;
 				
 			case 3: // SUPPRESSION ALBUM
 				System.out.println("Quel album veux-tu supprimer?");
 				String deleteName = lectureScanner.nextLine();
 				// RequetesJDBC.deleteAlbum(session.getConnection(), deleteName);
-				affichageOption();
 				break;
 			}
 
@@ -158,26 +149,22 @@ public class menu {
 				System.out.println("Quel titre veux-tu ajouter ?");
 				String trackName = lectureScanner.nextLine();
 				RequetesJDBC.createTitleWithName(session.getConnection(), trackName);
-				affichageOption();
 				break;
 				
 			case 2: // LECTURE TABLE TRACK
 				RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.TRACK);
-				affichageOption();
 				break;
 				
 			case 3: // SUPPRESSION TRACK
 				System.out.println("Quel titre veux-tu supprimer?");
 				String deleteTrack = lectureScanner.nextLine();
 				// RequetesJDBC.delete(session.getConnection(), deleteName);
-				affichageOption();
 				break;
 
 			case 4: // FAVORIS TRACK
 				System.out.println("Quel titre veux-tu mettre en favoris?");
 				String updateTrack = lectureScanner.nextLine();
-				RequetesJDBC.updateTitle(session.getConnection(), updateTrack);
-				affichageOption();
+				RequetesJDBC.updateTrack(session.getConnection(), updateTrack);
 				break;
 			}
 		}

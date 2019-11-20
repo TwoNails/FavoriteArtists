@@ -21,7 +21,10 @@ public class App  {
 		
     public static void main(String[] args) throws MalformedURLException, IOException, SQLException 
     { 
-        menu.CRUD();
+        while (true) {
+        	menu.CRUD();	
+		}
+    	
     }
     	
 }

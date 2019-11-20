@@ -74,7 +74,7 @@ public class RequetesAPI {
 		JSONObject dataArtist = dataAlbum.getJSONObject(0).getJSONObject("artist");
 		
 		int idArtist= dataArtist.getInt("id");	
-		RequetesJDBC.createArtistsWithID(conn, idArtist);
+		RequetesJDBC.createArtist(conn, idArtist);
 		
 		return new Album(dataAlbum);
 	}
@@ -89,7 +89,7 @@ public class RequetesAPI {
 		JSONObject jsonComplet = new JSONObject(jsonText);
 		
 		int idArtist = jsonComplet.getJSONObject("artist").getInt("id");
-		RequetesJDBC.createArtistsWithID(conn, idArtist);
+		RequetesJDBC.createArtist(conn, idArtist);
 		
 		return new Album(jsonComplet);
 }
@@ -109,7 +109,7 @@ public class RequetesAPI {
 		JSONArray dataTitre = jsonComplet.getJSONArray("data");
 		
 		int idAlbum = dataTitre.getJSONObject(0).getJSONObject("album").getInt("id");
-		RequetesJDBC.createAlbumWithID(conn, idAlbum);
+		RequetesJDBC.createAlbum(conn, idAlbum);
 		
 		return new Track(dataTitre);
 	}
@@ -123,7 +123,7 @@ public class RequetesAPI {
 		JSONObject jsonComplet = new JSONObject(jsonText);
 		
 		int idAlbum = jsonComplet.getJSONObject("album").getInt("id");
-		RequetesJDBC.createAlbumWithID(conn, idAlbum);
+		RequetesJDBC.createAlbum(conn, idAlbum);
 	
 		return new Track(jsonComplet);
 	}

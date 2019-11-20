@@ -13,9 +13,13 @@ public class Track{
 	private int id_album;
 	
 	//Constructors
-	public Track(int id, String title) {
+	public Track(int id, String title, int duration, int favorite, int id_album) {
+		super();
 		this.id = id;
-		this.title = title;  
+		this.title = title;
+		this.duration = duration;
+		this.favorite = favorite;
+		this.id_album = id_album;
 	}
 	
 
@@ -27,6 +31,8 @@ public class Track{
 	    this.id_album = titrejson.getJSONObject("album").getInt("id");
 	}
 	
+	
+
 	public Track (JSONArray titrejson) {
 		this(titrejson.getJSONObject(0));
 	}
