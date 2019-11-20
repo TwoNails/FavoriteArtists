@@ -4,7 +4,7 @@ public class Parametres {
 
 	private static String password = "root"; // 
     private static String user = "root";
-    private static String url = "jdbc:mysql://localhost:3308/simplon?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC";  
+    private static String url = "jdbc:mysql://localhost:3308/deezerdb?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC";  
 
 	public static String getPassword() {
 		return password;

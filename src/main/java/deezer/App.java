@@ -21,70 +21,7 @@ public class App  {
 		
     public static void main(String[] args) throws MalformedURLException, IOException, SQLException 
     { 
-    	Session session = new Session();
-    	
-    	RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.TRACK);
-    	System.out.print("\n"+String.format("%-10s|", "1 CREATE")+(String.format("%-10s|","2 READ")+String.format("%-10s|","3 DELETE")+(String.format("%-10s|","4 UPDATE"))));
-    	
-    	
-    	System.out.println("Veuillez choisir un numéro : ");
-    	Scanner lectureScanner = new Scanner(System.in);
-    	int réponseNum=-1;
-    	do {
-    		String réponse = lectureScanner.nextLine();
-    		
-    		try
-    		{
-    			réponseNum = Integer.parseInt(réponse);
-    			if (réponseNum>0&&réponseNum<4) 
-    			{
-    				continue;	
-				}
-    		}
-    		catch (Exception e) 
-    		{
-				System.out.println("Erreur pas un numéro");
-				System.out.println("Veuillez choisir un numéro : ");
-		    	Scanner lectureScanner1 = new Scanner(System.in);
-			}
-			} 
-    	while (réponseNum<0);
-    	
-    	switch (réponseNum) {
-		case 1: System.out.println("Quel artiste veux-tu ajouter ?");
-				String artistName = lectureScanner.nextLine();
-				RequetesJDBC.createArtistsWithName(session.getConnection(), artistName);
-				RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.ARTISTS);
-		    	System.out.print("\n"+String.format("%-10s|", "1 CREATE")+(String.format("%-10s|","2 READ")+String.format("%-10s|","3 DELETE")+"\n"));
-				
-
-			break;
-		case 2: RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.ALBUM);
-    		System.out.print("\n"+String.format("%-10s|", "1 CREATE")+(String.format("%-10s|","2 READ")+String.format("%-10s|","3 DELETE")));
-
-			break;
-		case 3: System.out.println("Quel artiste veux-tu supprimer?");
-		String deleteName = lectureScanner.nextLine();
-		RequetesJDBC.deleteArtists(session.getConnection(), deleteName);
-		RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.ARTISTS);
-    	System.out.print("\n"+String.format("%-10s|", "1 CREATE")+(String.format("%-10s|","2 READ")+String.format("%-10s|","3 DELETE")+"\n"));
-
-			break;
-
-		default: System.out.println("Quel titre veux-tu mettre en favoris?");
-		String updateName = lectureScanner.nextLine();
-		RequetesJDBC.updateTitle(session.getConnection(), updateName);
-		RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.TRACK);
-    	System.out.print("\n"+String.format("%-10s|", "1 CREATE")+(String.format("%-10s|","2 READ")+String.format("%-10s|","3 DELETE")+(String.format("%-10s|","4 UPDATE"))));
-    	
-
-			break;
-		}
-		
-    	
-    	
-    	//RequetesJDBC.afficheTable(session.getConnection(), RequetesJDBC.TRACK);
-    	//System.out.print("\n"+String.format("%-10s|", "1 CREATE")+(String.format("%-10s|","2 READ")+String.format("%-10s|","3 DELETE")+(String.format("%-10s|","4 UPDATE"))));
-    	
+        menu.CRUD();
     }
+    	
 }
