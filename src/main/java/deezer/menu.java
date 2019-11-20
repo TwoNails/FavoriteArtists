@@ -107,6 +107,7 @@ public class menu {
 				System.out.println("Quel artiste veux-tu ajouter ?");
 				String artistName = lectureScanner.nextLine();
 				RequetesJDBC.createArtist(session.getConnection(), artistName);
+				System.out.println("MAJ effectuée");
 				break;
 				
 			case 2: // LECTURE TABLE ARTISTE
@@ -117,8 +118,12 @@ public class menu {
 				System.out.println("Quel artiste veux-tu supprimer?");
 				String deleteName = lectureScanner.nextLine();
 				RequetesJDBC.deleteArtist(session.getConnection(), deleteName);
+				System.out.println("MAJ effectuée");
 				break;
 				
+			case 4 : // IMPOSSIBLE
+				System.out.println("Fonction à implémenter"); // TODO : penser à ajouter la fonction
+				break;				
 			}
 		} else if (tableSelectionne == ChoixTable.ALBUM.name()) {
 			selectionOption();
@@ -128,6 +133,7 @@ public class menu {
 				System.out.println("Quel album veux-tu ajouter ?");
 				String albumName = lectureScanner.nextLine();
 				RequetesJDBC.createAlbum(session.getConnection(), albumName);
+				System.out.println("MAJ effectuée");
 				break;
 				
 			case 2: // LECTURE TABLE ALBUM
@@ -137,8 +143,13 @@ public class menu {
 			case 3: // SUPPRESSION ALBUM
 				System.out.println("Quel album veux-tu supprimer?");
 				String deleteName = lectureScanner.nextLine();
-				// RequetesJDBC.deleteAlbum(session.getConnection(), deleteName);
+				RequetesJDBC.deleteAlbum(session.getConnection(), deleteName);
+				System.out.println("MAJ effectuée");
 				break;
+				
+			case 4 : // IMPOSSIBLE
+				System.out.println("Fonction à implémenter"); // TODO : penser à ajouter la fonction
+				break;	
 			}
 
 		} else if (tableSelectionne == ChoixTable.TRACK.name()) {
@@ -149,6 +160,7 @@ public class menu {
 				System.out.println("Quel titre veux-tu ajouter ?");
 				String trackName = lectureScanner.nextLine();
 				RequetesJDBC.createTitleWithName(session.getConnection(), trackName);
+				System.out.println("MAJ effectuée");
 				break;
 				
 			case 2: // LECTURE TABLE TRACK
@@ -158,13 +170,15 @@ public class menu {
 			case 3: // SUPPRESSION TRACK
 				System.out.println("Quel titre veux-tu supprimer?");
 				String deleteTrack = lectureScanner.nextLine();
-				// RequetesJDBC.delete(session.getConnection(), deleteName);
+				RequetesJDBC.deleteAlbum(session.getConnection(), deleteTrack);
+				System.out.println("MAJ effectuée");
 				break;
 
 			case 4: // FAVORIS TRACK
 				System.out.println("Quel titre veux-tu mettre en favoris?");
 				String updateTrack = lectureScanner.nextLine();
 				RequetesJDBC.updateTrack(session.getConnection(), updateTrack);
+				System.out.println("MAJ effectuée");
 				break;
 			}
 		}

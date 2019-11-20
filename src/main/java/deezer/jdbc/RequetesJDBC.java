@@ -222,15 +222,9 @@ public class RequetesJDBC {
 			System.out.println(id);
 			return getArtist(conn, id);
 		} catch (SQLException e) {
-			// System.out.println("L'artiste cherché n'est pas dans la base");
+			System.out.println("L'artiste cherché n'est pas dans la base");
 			return new Artist(0, "NOT IN BASE", 0);
 		}
-
-		// }
-
-		/*
-		 * else { throw new Error("l'artiste cherché n'est pas dans la base"); }
-		 */
 	}
 
 	public static Artist getArtist(Connection conn, int artistID) throws SQLException {
@@ -242,7 +236,7 @@ public class RequetesJDBC {
 		if (rs.next()) {
 			int id = rs.getInt("id");
 			String name = rs.getString("name");
-			int nbFan = rs.getInt("nb_fan");
+			int nbFan = rs.getInt("nb_fan");	
 			return new Artist(id, name, nbFan);
 		} else {
 			throw new Error("l'artiste cherché n'est pas dans la base");
@@ -252,7 +246,7 @@ public class RequetesJDBC {
 	// Read methods : album
 
 	public static Album getAlbum(Connection conn, String albumName) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("select * from " + ALBUM + " where name = ?");
+		PreparedStatement stmt = conn.prepareStatement("select * from " + ALBUM + " where title = ?");
 
 		stmt.setString(1, albumName);
 		ResultSet rs = stmt.executeQuery();
@@ -415,22 +409,6 @@ public class RequetesJDBC {
 		stmt.execute();
 	}
 
-	public static List<Artist> getAllArtists(Connection conn) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("select * from " + ARTISTS);
-
-		ResultSet rs = stmt.executeQuery();
-
-		List<Artist> artisteListe = new ArrayList<Artist>();
-
-		while (rs.next()) {
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
-			int nbFan = rs.getInt("nb_fan");
-			artisteListe.add(new Artist(id, name, nbFan));
-
-		}
-		return artisteListe;
-	}
 
 	// LISTES
 

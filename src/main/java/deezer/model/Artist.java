@@ -18,27 +18,16 @@ public class Artist {
 			this.nb_fan = nb_fan;
 		}
 		
-		public Artist(JSONArray artistjson) {
-			
-			//System.out.println("name : " + artistjson.getJSONObject(0).getString("name"));
-			//System.out.println("id : " + artistjson.getJSONObject(0).getInt("id"));
-			//System.out.println("nbfan : "+ artistjson.getJSONObject(0).getLong("nb_fan"));
-			
-			this.id = artistjson.getJSONObject(0).getInt("id");
-			this.name = artistjson.getJSONObject(0).getString("name");
-			this.nb_fan = artistjson.getJSONObject(0).getLong("nb_fan");
-		}
-		
 		public Artist(JSONObject artistjson) {
-			
-			//System.out.println("name : " + artistjson.getJSONObject(0).getString("name"));
-			//System.out.println("id : " + artistjson.getJSONObject(0).getInt("id"));
-			//System.out.println("nb_fan : "+ artistjson.getJSONObject(0).getLong("nb_fan"));
-			
 			this.id = artistjson.getInt("id");
 			this.name = artistjson.getString("name");
 			this.nb_fan = artistjson.getLong("nb_fan");
 		}
+		
+		public Artist(JSONArray artistjson) {		
+			this(artistjson.getJSONObject(0));
+		}
+		
 
 
 		//getter/setters/toString

@@ -102,7 +102,6 @@ public class RequetesAPI {
 		titre = titre.replace(" ", "%20");
 		
 		String url = "https://api.deezer.com/search/track/?q="+titre+"&index=0&limit=1&output=json";
-		System.out.println(url);
 		String jsonText = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
 		writeJson(jsonText);
 		JSONObject jsonComplet = new JSONObject(jsonText);
