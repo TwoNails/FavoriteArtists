@@ -37,7 +37,7 @@ public class RequetesAPI {
 	}
 	
 	
-	public static Artist artisteDeezer (Connection conn, String artiste) throws MalformedURLException, IOException, SQLException
+	public static Artist artisteDeezer (Connection conn, String artiste) throws MalformedURLException, IOException
 	{
 		artiste = artiste.replaceAll(" ", "%20");
 		
@@ -51,7 +51,7 @@ public class RequetesAPI {
 		return new Artist(dataArtist);
 	}
 	
-	public static Artist artisteDeezer (Connection conn, int idArtist) throws MalformedURLException, IOException, SQLException
+	public static Artist artisteDeezer (Connection conn, int idArtist) throws MalformedURLException, IOException
 	{
 		String url = "https://api.deezer.com/artist/"+idArtist;
 		

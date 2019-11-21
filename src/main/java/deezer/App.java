@@ -14,17 +14,11 @@ import deezer.jdbc.RequetesJDBC;import deezer.model.Artist;
 
 
 public class App  {
-   
-	private static final String jsonFileName = "sample.json";
-	
-	public static final String DEEZER_KEY = "6f248857d4mshe4bac8f2b40d35fp14b7abjsn29fb62695aae";
-		
+ 		
     public static void main(String[] args) throws MalformedURLException, IOException, SQLException 
     { 
         while (true) {
         	menu.CRUD();	
-		}
-    	
-    }
-    	
+		}   	
+    }    	
 }

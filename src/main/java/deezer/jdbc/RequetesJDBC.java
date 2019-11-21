@@ -373,6 +373,7 @@ public class RequetesJDBC {
 		PreparedStatement stmt = conn.prepareStatement("delete from " + TRACK + " where id_album = ? ");
 		stmt.setInt(1, albumID);
 		stmt.execute();
+		
 
 		// Then delete the album
 		stmt = conn.prepareStatement("delete from " + ALBUM + " where id = ? ");
