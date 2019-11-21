@@ -53,6 +53,10 @@ U : Ne fonctionne que sur la table des titres (pistes d'albums). Permet de mettr
 D : L'utilisateur peut supprimer une ligne de la table en recopiant le nom de l'artiste, de l'album ou du titre
 
 
+### Visuel ###
+
+![alt text](https://i.imgur.com/GMe3TOH.png)
+
 ### Ameliorations envisagées ###
 
 On pourrait avoir un menu dans lequel on évolue de façon différente, par exemple permettant d'afficher moins d'infos des tables dans un premier temps, et de permettre à l'utilisateur de demander des détails. D'avoir par exemple juste la liste des artistes, et de pouvoir sélectionner l'un d'entre eux pour afficher son nombre de fans et la liste de ses albums enregistrés en base de donnée.
