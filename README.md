@@ -33,13 +33,11 @@ Les méthodes employées sont des méthodes static rassemblées dans l'objet Req
 Elles prennent en paramètre la connexion et soit un int (l'ID), soit un String(le nom).
 
 
-### Les requêtes vers a base de données ###
+### Les requêtes vers la base de données ###
 
 Pour nos requêtes en direction de la base de donnée, le programme peut ajouter ou supprimer un artiste ou album individuel, afficher une table, et mettre à jour une piste. Puisqu'il n'est pas vraiment pertinent de modifier la plupart des données que nous stockons (La durée d'un morceau, l'auteur d'un album n'ont pas de raison d'être modifiées), la seule valeur que nous 
 
 
+### Interface utilisateur ###
 
 
-
-
-Décrire notre interface.
