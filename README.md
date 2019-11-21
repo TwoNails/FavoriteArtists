@@ -11,7 +11,8 @@ L'API de Deezer dispose de très nombreuses fonctionnalitées. Elle stocke des i
 Nous nous sommes concentrés sur trois fonctionnalités de l'API : récolter des informations sur des artistes, sur des albums, et sur des pistes.
 Un URL de requête peut prendre par exemple cette forme : https://api.deezer.com/track/4301418
 
-Décrire la structure de notre BDD (insérer diagramme merise)
+
+### Structure de notre base de donnée ###
 
 ![alt text](https://i.imgur.com/QI7SG3L.png)
 
@@ -31,6 +32,8 @@ Les méthodes employées sont des méthodes static rassemblées dans l'objet Req
   - public static Artist trackDeezer
 Elles prennent en paramètre la connexion et soit un int (l'ID), soit un String(le nom).
 
+
+### Les requêtes vers a base de données ###
 
 Pour nos requêtes en direction de la base de donnée, le programme peut ajouter ou supprimer un artiste ou album individuel, afficher une table, et mettre à jour une piste. Puisqu'il n'est pas vraiment pertinent de modifier la plupart des données que nous stockons (La durée d'un morceau, l'auteur d'un album n'ont pas de raison d'être modifiées), la seule valeur que nous 
 
