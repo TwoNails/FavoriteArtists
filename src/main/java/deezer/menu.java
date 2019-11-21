@@ -112,7 +112,6 @@ public class menu {
 				System.out.println("Veuillez choisir un numero : ");
 			}
 		} while (reponseNum < 0 || reponseNum > 4);
-		lectureScanner.close();
 	}
 	/**
 	 * Application of the CRUD on each table
