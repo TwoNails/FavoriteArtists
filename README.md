@@ -7,7 +7,7 @@ Le projet Favorite Artists est un programme permettant de faire une liste de ses
 
 ### L'API Deezer ###
 
-L'API de Deezer dispose de très nombreuses fonctionnalitées. Elle stocke des informations sur ses utilisateurs et leurs playlists, contient des informations sur des genres, des radios...
+L'API de Deezer dispose de très nombreuses fonctionnalités. Elle stocke des informations sur ses utilisateurs et leurs playlists, contient des informations sur des genres, des radios...
 Nous nous sommes concentrés sur trois fonctionnalités de l'API : récolter des informations sur des artistes, sur des albums, et sur des pistes.
 Un URL de requête peut prendre par exemple cette forme : https://api.deezer.com/track/4301418
 
