@@ -43,6 +43,8 @@ Les méthodes employées sont des méthodes static rassemblées dans l'objet Req
   - public static void deleteAlbum
   - public static Track getTrack
   - public static void updateTrack
+  
+  Elles prennent en paramètre la connexion et soit l'ID soit le nom d'un modèle à ajouter / consulter / mettre à jour / supprimer.
 
 ### Interface utilisateur ###
 
